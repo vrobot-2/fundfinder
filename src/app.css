@@ -1,0 +1,637 @@
+/* Fund Finder - Modern Design */
+
+/* Import modern fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Reset and base styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  background: #fafbfc;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.app-header h1 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Main content area */
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Sidebar */
+.app-sidebar {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.04);
+}
+
+/* Filter panel */
+.filter-panel {
+  flex-shrink: 0;
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.filter-panel h3 {
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  letter-spacing: -0.015em;
+}
+
+/* Business list container */
+.business-list-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+/* Business cards */
+.business-card {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  scroll-margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.business-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.business-card:hover::before {
+  opacity: 1;
+}
+
+.business-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.business-card.selected {
+  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  box-shadow: 0 0 0 2px #667eea, 0 8px 32px rgba(102, 126, 234, 0.15);
+  transform: scale(1.02);
+}
+
+.business-card.selected::before {
+  opacity: 1;
+}
+
+/* Business card typography */
+.business-card h5 {
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+.business-card .text-muted {
+  color: #64748b !important;
+  font-weight: 400;
+}
+
+.business-card .text-primary {
+  color: #667eea !important;
+  font-weight: 500;
+}
+
+/* Map section */
+.map-section {
+  flex: 1;
+  position: relative;
+  background: #e9ecef;
+}
+
+/* Map container */
+.map-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Leaflet map */
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.status-not-contacted {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.status-contacted {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border-color: #f59e0b;
+}
+
+.status-interested {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  border-color: #3b82f6;
+}
+
+.status-donated {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #047857;
+  border-color: #10b981;
+}
+
+.status-declined {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #b91c1c;
+  border-color: #ef4444;
+}
+
+/* Custom scrollbar */
+.business-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.business-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.business-list-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.business-list-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+}
+
+/* Footer */
+.app-footer {
+  flex-shrink: 0;
+  background: #343a40;
+  color: white;
+  text-align: center;
+  padding: 0.75rem 0;
+  font-size: 0.875rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .app-main {
+    flex-direction: column;
+  }
+  
+  .app-sidebar {
+    width: 100%;
+    order: 2;
+    max-height: 50vh;
+  }
+  
+  .map-section {
+    order: 1;
+    height: 50vh;
+    min-height: 300px;
+  }
+  
+  .filter-panel {
+    padding: 1rem;
+  }
+  
+  .business-list-container {
+    padding: 0.5rem;
+  }
+  
+  .business-card {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Touch improvements */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+  
+  .form-control,
+  .form-select {
+    min-height: 44px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* Utility classes */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 0px, #e0e0e0 40px, #f0f0f0 80px);
+  background-size: 200px;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Modern form styling */
+.form-control,
+.form-select {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Modern buttons */
+.btn {
+  border-radius: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+.btn-outline-secondary {
+  border: 1.5px solid #e2e8f0;
+  color: #64748b;
+  background: white;
+}
+
+.btn-outline-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Ensure flex containers work properly */
+.d-flex.flex-column {
+  min-height: 0;
+}
+
+.flex-grow-1 {
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+/* Smooth hover effects */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.hover-bg-light:hover {
+  background-color: rgba(248, 249, 250, 0.8) !important;
+}
+
+/* Card hover animations */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Map container full height */
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  /* Tablet adjustments */
+  .business-list-container {
+    max-height: 50vh !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* Mobile adjustments */
+  html, body {
+    overflow: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  #app {
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .vh-100 {
+    height: auto !important;
+    min-height: 100vh !important;
+  }
+  
+  main {
+    height: auto !important;
+    min-height: calc(100vh - 120px);
+  }
+  
+  .row.g-0.h-100 {
+    height: auto !important;
+  }
+  
+  /* Map appears first on mobile */
+  .order-1.order-md-2 {
+    min-height: 50vh;
+    max-height: 60vh;
+  }
+  
+  /* Sidebar appears second on mobile */
+  .order-2.order-md-1 {
+    border-right: none !important;
+    border-bottom: 1px solid #dee2e6;
+    min-height: 40vh;
+  }
+  
+  .business-list-container {
+    max-height: 35vh !important;
+    min-height: 200px;
+  }
+  
+  /* Larger touch targets for mobile */
+  .btn {
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+  }
+  
+  .form-control, .form-select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Card spacing for mobile */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  /* Header adjustments */
+  .container-fluid.py-3 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  .h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  .fs-1 {
+    font-size: 1.75rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* Small mobile adjustments */
+  .order-1.order-md-2 {
+    min-height: 45vh;
+    max-height: 50vh;
+  }
+  
+  .order-2.order-md-1 {
+    min-height: 50vh;
+  }
+  
+  .business-list-container {
+    max-height: 40vh !important;
+    min-height: 180px;
+  }
+  
+  /* Smaller padding on very small screens */
+  .p-3 {
+    padding: 1rem !important;
+  }
+  
+  .p-4 {
+    padding: 1rem !important;
+  }
+  
+  /* Stack action buttons vertically on small screens */
+  .btn-group {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    margin-left: 0 !important;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem !important;
+  }
+  
+  /* Adjust card content for small screens */
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+/* Icon spacing adjustments */
+.bi {
+  vertical-align: -0.125em;
+}
+
+/* Status badge improvements */
+.badge {
+  font-size: 0.75em;
+}
+
+/* Form control focus states */
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button group spacing */
+.btn-group .btn {
+  margin-left: 0;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Modern enhancements */
+.badge {
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 0.35em 0.65em;
+  border-radius: 50px;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon improvements */
+.bi {
+  vertical-align: -0.125em;
+}
+
+/* Loading states */
+.placeholder-glow .placeholder {
+  animation: placeholder-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes placeholder-glow {
+  50% { opacity: 0.2; }
+}
+
+/* Glassmorphism effects */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Interactive elements */
+.interactive:hover {
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+/* Text improvements */
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
