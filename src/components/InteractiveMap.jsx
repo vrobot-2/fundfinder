@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix for default markers in Leaflet with bundlers
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -17,15 +16,12 @@ export function InteractiveMap({ businesses, selectedBusiness, onBusinessSelect 
 
   useEffect(() => {
     if (mapRef.current && !mapInstanceRef.current) {
-      // Initialize map
       mapInstanceRef.current = L.map(mapRef.current).setView([40.7128, -74.0060], 12);
 
-      // Add tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
       }).addTo(mapInstanceRef.current);
 
-      // Handle resize after initialization
       setTimeout(() => {
         if (mapInstanceRef.current) {
           mapInstanceRef.current.invalidateSize();
@@ -44,17 +40,14 @@ export function InteractiveMap({ businesses, selectedBusiness, onBusinessSelect 
   useEffect(() => {
     if (!mapInstanceRef.current) return;
 
-    // Clear existing markers
     markersRef.current.forEach(marker => {
       mapInstanceRef.current.removeLayer(marker);
     });
     markersRef.current = [];
 
-    // Add markers for each business
     businesses.forEach(business => {
       const marker = L.marker(business.coordinates);
       
-      // Create popup content
       const popupContent = `
         <div class="p-2" style="min-width: 250px;">
           <h6 class="fw-bold text-dark mb-2">${business.name}</h6>
